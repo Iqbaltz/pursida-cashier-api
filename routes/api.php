@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
     Route::post('/', [CategoryController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CategoryController::class, 'update'])->name('update');
     Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () {
+    Route::get('/', [PaymentMethodController::class, '__invoke'])->name('all');
+    Route::get('/{slug}', [PaymentMethodController::class, 'detail'])->name('detail');
+    Route::post('/', [PaymentMethodController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [PaymentMethodController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
 });
