@@ -49,6 +49,7 @@ class PaymentMethodController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -58,6 +59,7 @@ class PaymentMethodController extends Controller
                 'error' => 'Payment Method not found',
             ], 404);
         }
+        $payment_method->slug = $request->slug;
         $payment_method->name = $request->name;
         $payment_method->save();
         return response()->json([

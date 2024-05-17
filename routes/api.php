@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\UserController;
@@ -41,4 +42,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () 
     Route::post('/', [PaymentMethodController::class, 'insert'])->name('insert');
     Route::post('/{id}', [PaymentMethodController::class, 'update'])->name('update');
     Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'barang'], function () {
+    Route::get('/', [BarangController::class, '__invoke'])->name('all');
+    Route::get('/{slug}', [BarangController::class, 'detail'])->name('detail');
+    Route::post('/', [BarangController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [BarangController::class, 'update'])->name('update');
+    Route::delete('/{id}', [BarangController::class, 'destroy'])->name('destroy');
 });

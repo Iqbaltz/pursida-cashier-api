@@ -19,7 +19,10 @@ class CategoryController extends Controller
     public function __invoke(Request $request)
     {
         $categories = Category::all();
-        return response()->json($categories);
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $categories
+        ]);
     }
 
     public function detail(Request $request, $slug)
@@ -30,7 +33,10 @@ class CategoryController extends Controller
                 'error' => 'Category not found',
             ], 404);
         }
-        return response()->json($category);
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $category
+        ]);
     }
 
     public function insert(Request $request)
@@ -50,6 +56,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -60,6 +67,7 @@ class CategoryController extends Controller
             ], 404);
         }
         $category->name = $request->name;
+        $category->slug = $request->slug;
         $category->save();
         return response()->json([
             'message' => 'Category successfully updated',
