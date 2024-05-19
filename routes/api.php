@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -59,4 +60,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'supplier'], function () {
     Route::post('/', [SupplierController::class, 'insert'])->name('insert');
     Route::post('/{id}', [SupplierController::class, 'update'])->name('update');
     Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'customer'], function () {
+    Route::get('/', [CustomerController::class, '__invoke'])->name('all');
+    Route::get('/{id}', [CustomerController::class, 'detail'])->name('detail');
+    Route::post('/', [CustomerController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [CustomerController::class, 'update'])->name('update');
+    Route::delete('/{id}', [CustomerController::class, 'destroy'])->name('destroy');
 });

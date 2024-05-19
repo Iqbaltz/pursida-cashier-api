@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class CustomerController extends Controller
 {
     public function __construct()
     {
@@ -14,24 +14,24 @@ class SupplierController extends Controller
 
     public function __invoke(Request $request)
     {
-        $suppliers = Supplier::all();
+        $customers = Customer::all();
         return response()->json([
             'message' => 'data successfully retrieved',
-            'data' => $suppliers
+            'data' => $customers
         ]);
     }
 
     public function detail(Request $request, $id)
     {
-        $supplier = Supplier::find($id);
-        if (!$supplier) {
+        $customer = Customer::find($id);
+        if (!$customer) {
             return response()->json([
-                'error' => 'Supplier not found',
+                'error' => 'Customer not found',
             ], 404);
         }
         return response()->json([
             'message' => 'data successfully retrieved',
-            'data' => $supplier
+            'data' => $customer
         ]);
     }
 
@@ -43,10 +43,10 @@ class SupplierController extends Controller
             'phone_number' => 'required|string|max:255',
         ]);
 
-        $newSupplier = Supplier::create($validatedData);
+        $newCustomer = Customer::create($validatedData);
         return response()->json([
-            'message' => 'Supplier successfully added',
-            'data' => $newSupplier
+            'message' => 'Customer successfully added',
+            'data' => $newCustomer
         ]);
     }
 
@@ -58,34 +58,34 @@ class SupplierController extends Controller
             'phone_number' => 'required|string|max:255',
         ]);
 
-        $supplier = Supplier::find($id);
-        if (!$supplier) {
+        $customer = Customer::find($id);
+        if (!$customer) {
             return response()->json([
-                'error' => 'Supplier not found',
+                'error' => 'customer not found',
             ], 404);
         }
-        $supplier->name = $request->name;
-        $supplier->address = $request->address;
-        $supplier->phone_number = $request->phone_number;
-        $supplier->save();
+        $customer->name = $request->name;
+        $customer->address = $request->address;
+        $customer->phone_number = $request->phone_number;
+        $customer->save();
         return response()->json([
-            'message' => 'Supplier successfully updated',
-            'data' => $supplier
+            'message' => 'Customer successfully updated',
+            'data' => $customer
         ]);
     }
 
     public function destroy(Request $request, $id)
     {
-        $supplier = Supplier::find($id);
-        if (!$supplier) {
+        $customer = Customer::find($id);
+        if (!$customer) {
             return response()->json([
-                'error' => 'Supplier not found',
+                'error' => 'Customer not found',
             ], 404);
         }
-        $supplier->delete();
+        $customer->delete();
         return response()->json([
-            'message' => 'Supplier successfully deleted',
-            'data' => $supplier
+            'message' => 'Customer successfully deleted',
+            'data' => $customer
         ]);
     }
 }
