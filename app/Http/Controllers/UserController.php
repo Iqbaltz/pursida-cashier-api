@@ -10,6 +10,29 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+    public function __invoke(Request $request)
+    {
+        $users = User::all();
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $users
+        ]);
+    }
+
+    public function detail(Request $request, $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not found',
+            ], 404);
+        }
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $user
+        ]);
+    }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BarangTransactionController;
+use App\Http\Controllers\CashierTransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaymentMethodController;
@@ -29,6 +30,14 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::get('me', [AuthController::class, 'me'])->name('me');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
+    Route::get('/', [UserController::class, '__invoke'])->name('all');
+    Route::get('/{id}', [UserController::class, 'detail'])->name('detail');
+    // Route::post('/', [CategoryController::class, 'insert'])->name('insert');
+    // Route::post('/{id}', [CategoryController::class, 'update'])->name('update');
+    // Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
@@ -77,4 +86,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'barang-transaction'], function
     Route::post('/', [BarangTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangTransactionController::class, 'update'])->name('update');
     Route::delete('/{id}', [BarangTransactionController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'cashier-transaction'], function () {
+    Route::get('/', [CashierTransactionController::class, '__invoke'])->name('all');
+    Route::get('/{id}', [CashierTransactionController::class, 'detail'])->name('detail');
+    Route::post('/', [CashierTransactionController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [CashierTransactionController::class, 'update'])->name('update');
+    Route::delete('/{id}', [CashierTransactionController::class, 'destroy'])->name('destroy');
 });
