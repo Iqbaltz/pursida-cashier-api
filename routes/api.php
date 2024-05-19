@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BarangTransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaymentMethodController;
@@ -68,4 +69,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'customer'], function () {
     Route::post('/', [CustomerController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CustomerController::class, 'update'])->name('update');
     Route::delete('/{id}', [CustomerController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'barang-transaction'], function () {
+    Route::get('/', [BarangTransactionController::class, '__invoke'])->name('all');
+    Route::get('/{id}', [BarangTransactionController::class, 'detail'])->name('detail');
+    Route::post('/', [BarangTransactionController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [BarangTransactionController::class, 'update'])->name('update');
+    Route::delete('/{id}', [BarangTransactionController::class, 'destroy'])->name('destroy');
 });
