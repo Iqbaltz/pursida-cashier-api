@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,4 +51,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'barang'], function () {
     Route::post('/', [BarangController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangController::class, 'update'])->name('update');
     Route::delete('/{id}', [BarangController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => 'api', 'prefix' => 'supplier'], function () {
+    Route::get('/', [SupplierController::class, '__invoke'])->name('all');
+    Route::get('/{id}', [SupplierController::class, 'detail'])->name('detail');
+    Route::post('/', [SupplierController::class, 'insert'])->name('insert');
+    Route::post('/{id}', [SupplierController::class, 'update'])->name('update');
+    Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
 });
