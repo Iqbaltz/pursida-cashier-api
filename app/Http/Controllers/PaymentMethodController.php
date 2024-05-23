@@ -17,7 +17,7 @@ class PaymentMethodController extends Controller
 
     public function __invoke(Request $request)
     {
-        $payment_methods = PaymentMethods::all();
+        $payment_methods = PaymentMethods::orderBy('created_at', 'desc')->get();
         return response()->json([
             'message' => 'data successfully retrieved',
             'data' => $payment_methods

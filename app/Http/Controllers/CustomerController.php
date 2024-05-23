@@ -14,7 +14,7 @@ class CustomerController extends Controller
 
     public function __invoke(Request $request)
     {
-        $customers = Customer::all();
+        $customers = Customer::orderBy('created_at', 'DESC')->get();
         return response()->json([
             'message' => 'data successfully retrieved',
             'data' => $customers

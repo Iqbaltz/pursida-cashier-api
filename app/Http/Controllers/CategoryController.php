@@ -18,7 +18,7 @@ class CategoryController extends Controller
 
     public function __invoke(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('created_at', 'desc')->get();
         return response()->json([
             'message' => 'data successfully retrieved',
             'data' => $categories

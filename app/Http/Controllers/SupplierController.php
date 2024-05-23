@@ -14,7 +14,7 @@ class SupplierController extends Controller
 
     public function __invoke(Request $request)
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::orderBy('created_at', 'desc')->get();
         return response()->json([
             'message' => 'data successfully retrieved',
             'data' => $suppliers
@@ -39,8 +39,8 @@ class SupplierController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:255',
+            'address' => 'string|max:255',
+            'phone_number' => 'string|max:20',
         ]);
 
         $newSupplier = Supplier::create($validatedData);
