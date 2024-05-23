@@ -170,6 +170,7 @@ class CashierTransactionController extends Controller
 
         return response()->json([
             'message' => 'Transaction and associated items deleted successfully',
+            'data' => $cashierTransaction
         ]);
     }
 }

@@ -18,7 +18,10 @@ class PaymentMethodController extends Controller
     public function __invoke(Request $request)
     {
         $payment_methods = PaymentMethods::all();
-        return response()->json($payment_methods);
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $payment_methods
+        ]);
     }
 
     public function detail(Request $request, $slug)
@@ -29,7 +32,10 @@ class PaymentMethodController extends Controller
                 'error' => 'Payment Method not found',
             ], 404);
         }
-        return response()->json($payment_method);
+        return response()->json([
+            'message' => 'data successfully retrieved',
+            'data' => $payment_method
+        ]);
     }
 
     public function insert(Request $request)
