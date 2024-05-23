@@ -25,9 +25,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function detail(Request $request, $slug)
+    public function detail(Request $request, $id)
     {
-        $category = Category::where('slug', $slug)->first();
+        $category = Category::find($id);
         if (!$category) {
             return response()->json([
                 'error' => 'Category not found',
@@ -42,7 +42,6 @@ class CategoryController extends Controller
     public function insert(Request $request)
     {
         $validatedData = $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -56,7 +55,6 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -67,7 +65,6 @@ class CategoryController extends Controller
             ], 404);
         }
         $category->name = $request->name;
-        $category->slug = $request->slug;
         $category->save();
         return response()->json([
             'message' => 'Category successfully updated',

@@ -24,9 +24,9 @@ class PaymentMethodController extends Controller
         ]);
     }
 
-    public function detail(Request $request, $slug)
+    public function detail(Request $request, $id)
     {
-        $payment_method = PaymentMethods::where('slug', $slug)->first();
+        $payment_method = PaymentMethods::find($id);
         if (!$payment_method) {
             return response()->json([
                 'error' => 'Payment Method not found',
@@ -41,7 +41,6 @@ class PaymentMethodController extends Controller
     public function insert(Request $request)
     {
         $validatedData = $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -55,7 +54,6 @@ class PaymentMethodController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
         ]);
 
@@ -65,7 +63,6 @@ class PaymentMethodController extends Controller
                 'error' => 'Payment Method not found',
             ], 404);
         }
-        $payment_method->slug = $request->slug;
         $payment_method->name = $request->name;
         $payment_method->save();
         return response()->json([

@@ -24,9 +24,9 @@ class BarangController extends Controller
         ]);
     }
 
-    public function detail(Request $request, $slug)
+    public function detail(Request $request, $id)
     {
-        $barang = Barang::where('slug', $slug)->with('category')->first();
+        $barang = Barang::with('category')->find($id);
         if (!$barang) {
             return response()->json([
                 'error' => 'Barang not found',
@@ -41,7 +41,6 @@ class BarangController extends Controller
     public function insert(Request $request)
     {
         $validatedData = $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
             'category_id' => 'integer|exists:categories,id',
             'hitung_stok' => 'boolean',
@@ -63,7 +62,6 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'name' => 'required|string|max:255',
             'category_id' => 'integer|exists:categories,id',
             'hitung_stok' => 'boolean',
@@ -80,7 +78,6 @@ class BarangController extends Controller
                 'error' => 'Barang not found',
             ], 404);
         }
-        $barang->slug = $request->slug;
         $barang->name = $request->name;
         $barang->category_id = $request->category_id;
         if ($request->hitung_stok) $barang->hitung_stok = $request->hitung_stok;

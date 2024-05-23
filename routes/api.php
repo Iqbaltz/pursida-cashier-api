@@ -42,7 +42,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
 
 Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
     Route::get('/', [CategoryController::class, '__invoke'])->name('all');
-    Route::get('/{slug}', [CategoryController::class, 'detail'])->name('detail');
+    Route::get('/{id}', [CategoryController::class, 'detail'])->name('detail');
     Route::post('/', [CategoryController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CategoryController::class, 'update'])->name('update');
     Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
@@ -50,7 +50,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
 
 Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () {
     Route::get('/', [PaymentMethodController::class, '__invoke'])->name('all');
-    Route::get('/{slug}', [PaymentMethodController::class, 'detail'])->name('detail');
+    Route::get('/{id}', [PaymentMethodController::class, 'detail'])->name('detail');
     Route::post('/', [PaymentMethodController::class, 'insert'])->name('insert');
     Route::post('/{id}', [PaymentMethodController::class, 'update'])->name('update');
     Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
@@ -58,7 +58,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () 
 
 Route::group(['middleware' => 'api', 'prefix' => 'barang'], function () {
     Route::get('/', [BarangController::class, '__invoke'])->name('all');
-    Route::get('/{slug}', [BarangController::class, 'detail'])->name('detail');
+    Route::get('/{id}', [BarangController::class, 'detail'])->name('detail');
     Route::post('/', [BarangController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangController::class, 'update'])->name('update');
     Route::delete('/{id}', [BarangController::class, 'destroy'])->name('destroy');

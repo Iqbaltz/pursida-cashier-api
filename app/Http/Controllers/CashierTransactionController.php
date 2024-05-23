@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CashierTransaction;
 use App\Models\CashierTransactionItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +46,6 @@ class CashierTransactionController extends Controller
     public function insert(Request $request)
     {
         $validatedData = $request->validate([
-            'transaction_number' => 'required|string|max:255',
             'transaction_date' => 'required|date',
             'cashier_id' => 'required|integer|exists:users,id',
             'customer_id' => 'required|integer|exists:customers,id',
@@ -57,11 +57,16 @@ class CashierTransactionController extends Controller
             'items.*.qty' => 'required|integer|min:1',
         ]);
 
+
         $cashierTransactionId = null;
         DB::transaction(function () use ($validatedData, &$cashierTransactionId) {
+            $date = Carbon::now()->format('ymd');
+            $count = CashierTransaction::whereDate('created_at', Carbon::today())->count() + 1;
+            $sequence = str_pad($count, 4, '0', STR_PAD_LEFT);
+            $transaction_number = 'TRXN' . $date . $sequence;
             // Create the cashier transaction
             $cashierTransaction = CashierTransaction::create([
-                'transaction_number' => $validatedData['transaction_number'],
+                'transaction_number' => $transaction_number,
                 'transaction_date' => $validatedData['transaction_date'],
                 'cashier_id' => $validatedData['cashier_id'],
                 'customer_id' => $validatedData['customer_id'],
