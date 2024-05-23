@@ -57,7 +57,6 @@ class CashierTransactionController extends Controller
             'items.*.qty' => 'required|integer|min:1',
         ]);
 
-
         $cashierTransactionId = null;
         DB::transaction(function () use ($validatedData, &$cashierTransactionId) {
             $date = Carbon::now()->format('ymd');
@@ -100,7 +99,7 @@ class CashierTransactionController extends Controller
     {
         // Validate the main cashier transaction data
         $validatedData = $request->validate([
-            'transaction_number' => 'required|string|max:255',
+            'transaction_number' => 'string|max:20',
             'transaction_date' => 'required|date',
             'cashier_id' => 'required|integer|exists:users,id',
             'customer_id' => 'required|integer|exists:customers,id',
@@ -118,14 +117,18 @@ class CashierTransactionController extends Controller
             $cashierTransaction = CashierTransaction::findOrFail($id);
 
             // Update the cashier transaction
-            $cashierTransaction->update([
-                'transaction_number' => $validatedData['transaction_number'],
+            $updatedData = [
                 'transaction_date' => $validatedData['transaction_date'],
                 'cashier_id' => $validatedData['cashier_id'],
                 'customer_id' => $validatedData['customer_id'],
                 'payment_method_id' => $validatedData['payment_method_id'],
                 'discount' => $validatedData['discount'],
-            ]);
+            ];
+
+            if (isset($validatedData['transaction_number'])) {
+                $updatedData['transaction_number'] = $validatedData['transaction_number'];
+            }
+            $cashierTransaction->update($updatedData);
 
             // Collect the IDs of existing items to update
             $existingItemIds = collect($validatedData['items'])->pluck('id')->filter()->all();
