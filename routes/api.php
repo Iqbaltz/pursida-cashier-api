@@ -7,6 +7,7 @@ use App\Http\Controllers\CashierTransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\StoreInformationController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::get('me', [AuthController::class, 'me'])->name('me');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'users'], function () {
     Route::get('/', [UserController::class, '__invoke'])->name('all');
     Route::get('/{id}', [UserController::class, 'detail'])->name('detail');
     // Route::post('/', [CategoryController::class, 'insert'])->name('insert');
@@ -40,7 +41,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'users'], function () {
     // Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'category'], function () {
     Route::get('/', [CategoryController::class, '__invoke'])->name('all');
     Route::get('/{id}', [CategoryController::class, 'detail'])->name('detail');
     Route::post('/', [CategoryController::class, 'insert'])->name('insert');
@@ -48,7 +49,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'category'], function () {
     Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'payment-method'], function () {
     Route::get('/', [PaymentMethodController::class, '__invoke'])->name('all');
     Route::get('/{id}', [PaymentMethodController::class, 'detail'])->name('detail');
     Route::post('/', [PaymentMethodController::class, 'insert'])->name('insert');
@@ -56,7 +57,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'payment-method'], function () 
     Route::delete('/{id}', [PaymentMethodController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'barang'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'barang'], function () {
     Route::get('/', [BarangController::class, '__invoke'])->name('all');
     Route::get('/{id}', [BarangController::class, 'detail'])->name('detail');
     Route::post('/', [BarangController::class, 'insert'])->name('insert');
@@ -64,7 +65,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'barang'], function () {
     Route::delete('/{id}', [BarangController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'supplier'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'supplier'], function () {
     Route::get('/', [SupplierController::class, '__invoke'])->name('all');
     Route::get('/{id}', [SupplierController::class, 'detail'])->name('detail');
     Route::post('/', [SupplierController::class, 'insert'])->name('insert');
@@ -72,7 +73,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'supplier'], function () {
     Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'customer'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'customer'], function () {
     Route::get('/', [CustomerController::class, '__invoke'])->name('all');
     Route::get('/{id}', [CustomerController::class, 'detail'])->name('detail');
     Route::post('/', [CustomerController::class, 'insert'])->name('insert');
@@ -80,7 +81,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'customer'], function () {
     Route::delete('/{id}', [CustomerController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'barang-transaction'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'barang-transaction'], function () {
     Route::get('/', [BarangTransactionController::class, '__invoke'])->name('all');
     Route::get('/{id}', [BarangTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [BarangTransactionController::class, 'insert'])->name('insert');
@@ -88,10 +89,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'barang-transaction'], function
     Route::delete('/{id}', [BarangTransactionController::class, 'destroy'])->name('destroy');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'cashier-transaction'], function () {
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'cashier-transaction'], function () {
     Route::get('/', [CashierTransactionController::class, '__invoke'])->name('all');
     Route::get('/{id}', [CashierTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [CashierTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CashierTransactionController::class, 'update'])->name('update');
     Route::delete('/{id}', [CashierTransactionController::class, 'destroy'])->name('destroy');
+});
+
+Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'store-information'], function () {
+    Route::get('/', [StoreInformationController::class, '__invoke'])->name('detail');
+    Route::post('/', [StoreInformationController::class, 'update'])->name('update');
 });
