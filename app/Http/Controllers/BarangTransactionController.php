@@ -3,16 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangTransaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BarangTransactionController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $barang_transactions = BarangTransaction::with('supplier', 'barang')->get();
+        $barang_transactions = BarangTransaction::with('supplier', 'barang')->orderBy('transaction_date', 'desc');
+        if ($request->search) {
+            $barang_transactions->whereHas('supplier', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%$request->search%");
+            })->orWhereHas('barang', function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%$request->search%");
+            });
+        }
+        if ($request->order_by) {
+            $order = explode(',', $request->order_by);
+            $order = array_chunk($order, 2);
+            for ($i = 0; $i < count($order); $i++) {
+                $barang_transactions->orderBy($order[$i][0], $order[$i][1]);
+            }
+        } else {
+            $barang_transactions->orderBy('updated_at', 'DESC');
+        }
+
         return response()->json([
             'message' => 'data successfully retrieved',
-            'data' => $barang_transactions
+            'data' => $barang_transactions->paginate($this->per_page()),
+            'summary' => $barang_transactions->sum(DB::raw('harga_beli * jumlah'))
         ]);
     }
 
@@ -39,6 +59,7 @@ class BarangTransactionController extends Controller
             'harga_beli' => 'required|integer|min:0',
             'jumlah' => 'required|integer|min:1',
         ]);
+        $validatedData['transaction_date'] = Carbon::parse($validatedData['transaction_date']);
 
         $newTransaction = BarangTransaction::create($validatedData);
         return response()->json([
@@ -64,6 +85,7 @@ class BarangTransactionController extends Controller
             ], 404);
         }
         $barang_transaction->transaction_date = $request->transaction_date;
+        $barang_transaction->transaction_date = Carbon::parse($request->transaction_date);
         $barang_transaction->supplier_id = $request->supplier_id;
         $barang_transaction->barang_id = $request->barang_id;
         $barang_transaction->harga_beli = $request->harga_beli;
