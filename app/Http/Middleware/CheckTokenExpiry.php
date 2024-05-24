@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -16,7 +17,6 @@ class CheckTokenExpiry
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $tokenTTL = auth()->factory()->getTTL() * 60;
         $tokenExpiry = JWTAuth::parseToken()->getPayload()->get('exp');
         $currentTime = time();
 
@@ -26,7 +26,11 @@ class CheckTokenExpiry
             try {
                 $newToken = auth()->refresh();
                 $response = $next($request);
-                $response->headers->set('Authorization', 'Bearer ' . $newToken);
+                if ($response instanceof \Illuminate\Http\JsonResponse) {
+                    $originalData = $response->getData(true);
+                    $originalData['new_token'] = $newToken;
+                    $response->setData($originalData);
+                }
                 return $response;
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Token refresh failed'], 401);
