@@ -11,11 +11,6 @@ class CategoryController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function __invoke(Request $request)
     {
         $categories = Category::orderBy('created_at', 'desc')->get();

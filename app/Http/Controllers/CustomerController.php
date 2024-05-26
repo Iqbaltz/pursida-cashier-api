@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function __invoke(Request $request)
     {
         $customers = Customer::orderBy('created_at', 'DESC')->get();

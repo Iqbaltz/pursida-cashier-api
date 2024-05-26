@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function __invoke(Request $request)
     {
         $suppliers = Supplier::orderBy('created_at', 'desc')->get();

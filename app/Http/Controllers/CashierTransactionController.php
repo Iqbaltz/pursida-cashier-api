@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class CashierTransactionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function __invoke(Request $request)
     {
         $cashier_transactions = CashierTransaction::with([
@@ -50,7 +45,7 @@ class CashierTransactionController extends Controller
             'cashier_id' => 'required|integer|exists:users,id',
             'customer_id' => 'required|integer|exists:customers,id',
             'payment_method_id' => 'required|integer|exists:payment_methods,id',
-            'discount' => 'required|numeric|min:0|max:100',
+            'discount' => 'required|numeric|min:0',
             'items' => 'required|array',
             'items.*.barang_id' => 'required|integer|exists:barangs,id',
             'items.*.transaction_type' => 'required|in:satuan,grosir,reseller',
@@ -90,7 +85,7 @@ class CashierTransactionController extends Controller
         ])->find($cashierTransactionId);
 
         return response()->json([
-            'message' => 'Transactin successfully added',
+            'message' => 'Transaction successfully added',
             'data' => $cashier_transaction
         ]);
     }
@@ -104,7 +99,7 @@ class CashierTransactionController extends Controller
             'cashier_id' => 'required|integer|exists:users,id',
             'customer_id' => 'required|integer|exists:customers,id',
             'payment_method_id' => 'required|integer|exists:payment_methods,id',
-            'discount' => 'required|numeric|min:0|max:100',
+            'discount' => 'required|numeric|min:0',
             'items' => 'required|array',
             'items.*.id' => 'nullable|integer|exists:cashier_transaction_items,id',
             'items.*.barang_id' => 'required|integer|exists:barangs,id',

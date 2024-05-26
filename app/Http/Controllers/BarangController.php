@@ -10,14 +10,9 @@ class BarangController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function __invoke(Request $request)
     {
-        $barangs = Barang::with('category')->get();
+        $barangs = Barang::with('category')->orderBy('created_at', 'desc')->get();
         return response()->json([
             'message' => 'data successfully retrieved',
             'data' => $barangs
@@ -80,12 +75,15 @@ class BarangController extends Controller
         }
         $barang->name = $request->name;
         $barang->category_id = $request->category_id;
-        if ($request->hitung_stok) $barang->hitung_stok = $request->hitung_stok;
         $barang->harga_modal = $request->harga_modal;
         $barang->harga_jual_satuan = $request->harga_jual_satuan;
         $barang->harga_jual_grosir = $request->harga_jual_grosir;
         $barang->harga_jual_reseller = $request->harga_jual_reseller;
         if ($request->stok) $barang->stok = $request->stok;
+        if (isset($request->hitung_stok)) {
+            $barang->hitung_stok = $request->hitung_stok;
+            if ($barang->hitung_stok == false) $barang->stok = 0;
+        }
         $barang->save();
         $updatedBarang = Barang::with('category')->find($barang->id);
         return response()->json([
