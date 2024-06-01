@@ -84,6 +84,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'barang-transaction'], function () {
     Route::get('/', [BarangTransactionController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [BarangTransactionController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [BarangTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [BarangTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangTransactionController::class, 'update'])->name('update');

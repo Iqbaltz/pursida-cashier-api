@@ -112,7 +112,7 @@ class BarangController extends Controller
     public function export_excel(Request $request)
     {
         $date = get_indo_date(date('Y-m-d'));
-        $filename = "Daftar barang {$date}.xlsx";
+        $filename = "Daftar barang - {$date}.xlsx";
         return Excel::download(new DaftarBarangExport, $filename);
     }
 }

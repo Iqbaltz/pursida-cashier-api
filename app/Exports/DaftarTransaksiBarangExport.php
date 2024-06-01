@@ -2,8 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Barang;
-use App\Models\barangs;
+use App\Models\BarangTransaction;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -11,67 +10,74 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class DaftarBarangExport implements FromCollection, WithTitle, WithHeadings, WithStyles, WithColumnWidths
+class DaftarTransaksiBarangExport implements FromCollection, WithTitle, WithHeadings, WithStyles, WithColumnWidths
 {
     /**
      * @return \Illuminate\Support\Collection
      */
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct($startDate = null, $endDate = null)
+    {
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
     public function headings(): array
     {
         return [
             '#',
+            'Tanggal Transaksi',
             'Nama Barang',
-            'Category',
-            'Hitung Stok',
-            'Harga Modal',
-            'Harga Jual Satuan',
-            'Harga Jual Grosir',
-            'Harga Jual Reseller',
-            'Stok'
+            'Nama Supplier',
+            'Harga Beli',
+            'Jumlah',
+            'Total',
         ];
     }
     public function title(): string
     {
-        return 'Daftar Barang';
+        return 'Daftar Transaksi Barang';
     }
     public function collection()
     {
-        $barangs = Barang::with('category')->orderBy('created_at', 'desc')->get();
+        $query = BarangTransaction::with('supplier', 'barang')->orderBy('transaction_date', 'desc');
+        if ($this->startDate) {
+            $query->where('transaction_date', '>=', $this->startDate);
+        }
+        if ($this->endDate) {
+            $query->where('transaction_date', '<=', $this->endDate);
+        }
+        $barang_transactions = $query->get();
 
-        $totalHargaModal = 0;
-        $totalHargaJualSatuan = 0;
-        $totalHargaJualGrosir = 0;
-        $totalHargaJualReseller = 0;
+        $totalHargaBeli = 0;
+        $totalJumlah = 0;
+        $totalTotal = 0;
 
-        $data = $barangs->map(function ($x, $i) use (&$totalHargaModal, &$totalHargaJualSatuan, &$totalHargaJualGrosir, &$totalHargaJualReseller) {
-            $totalHargaModal += $x->harga_modal;
-            $totalHargaJualSatuan += $x->harga_jual_satuan;
-            $totalHargaJualGrosir += $x->harga_jual_grosir;
-            $totalHargaJualReseller += $x->harga_jual_reseller;
+        $data = $barang_transactions->map(function ($x, $i) use (&$totalHargaBeli, &$totalJumlah, &$totalTotal) {
+            $totalHargaBeli += $x->harga_beli;
+            $totalJumlah += $x->jumlah;
+            $totalTotal += ($x->harga_beli * $x->jumlah);
 
             return [
                 'number' => $i + 1,
-                'name' => $x->name,
-                'category' => $x->category->name,
-                'hitung_stok' => $x->hitung_stok ? 'Ya' : 'tidak',
-                'harga_modal' => format_rupiah($x->harga_modal),
-                'harga_jual_satuan' => format_rupiah($x->harga_jual_satuan),
-                'harga_jual_grosir' => format_rupiah($x->harga_jual_grosir),
-                'harga_jual_reseller' => format_rupiah($x->harga_jual_reseller),
-                'stok' => $x->hitung_stok ? strval($x->stok) : '-'
+                'transaction_date' => format_indonesia_datetime($x->transaction_date),
+                'barang' => $x->barang->name,
+                'supplier' => $x->supplier->name,
+                'harga_beli' => format_rupiah($x->harga_beli),
+                'jumlah' => strval($x->jumlah),
+                'total' => format_rupiah($x->harga_beli * $x->jumlah),
             ];
         });
 
         $totals = [
             'number' => '',
-            'name' => 'Total',
-            'category' => '',
-            'hitung_stok' => '',
-            'harga_modal' => format_rupiah($totalHargaModal),
-            'harga_jual_satuan' => format_rupiah($totalHargaJualSatuan),
-            'harga_jual_grosir' => format_rupiah($totalHargaJualGrosir),
-            'harga_jual_reseller' => format_rupiah($totalHargaJualReseller),
-            'stok' => ''
+            'transaction_date' => 'Total',
+            'name' => '',
+            'supplier' => '',
+            'harga_beli' => format_rupiah($totalHargaBeli),
+            'jumlah' => $totalJumlah,
+            'total' => format_rupiah($totalTotal),
         ];
 
         // Add the totals as the first row
@@ -122,8 +128,6 @@ class DaftarBarangExport implements FromCollection, WithTitle, WithHeadings, Wit
             'E' => 20,
             'F' => 20,
             'G' => 20,
-            'H' => 20,
-            'I' => 20,
         ];
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DaftarTransaksiBarangExport;
 use App\Models\BarangTransaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BarangTransactionController extends Controller
 {
@@ -110,5 +112,18 @@ class BarangTransactionController extends Controller
             'message' => 'Transaction successfully deleted',
             'data' => $barang_transaction
         ]);
+    }
+
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar transaksi barang masuk - {$date}.xlsx";
+        $start_date = $request->start_date ?? null;
+        $end_date = $request->end_date ?? null;
+        if ($start_date || $end_date) {
+            $filename = "Daftar transaksi barang masuk - {$date} - filtered.xlsx";
+        }
+        // date format: 2024-01-01
+        return Excel::download(new DaftarTransaksiBarangExport($start_date, $end_date), $filename);
     }
 }
