@@ -11,6 +11,8 @@ class CashierTransactionItem extends Model
     protected $fillable = [
         'cashier_transaction_id',
         'barang_id',
+        'barang_name',
+        'price_per_barang',
         'transaction_type',
         'qty',
     ];

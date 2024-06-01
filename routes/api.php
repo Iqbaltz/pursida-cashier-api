@@ -93,6 +93,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'cashier-transaction'], function () {
     Route::get('/', [CashierTransactionController::class, '__invoke'])->name('all');
+    Route::get('/print-receipt/{id}', [CashierTransactionController::class, 'print_receipt'])->name('print_receipt');
     Route::get('/{id}', [CashierTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [CashierTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CashierTransactionController::class, 'update'])->name('update');
