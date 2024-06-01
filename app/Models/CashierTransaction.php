@@ -10,6 +10,11 @@ class CashierTransaction extends Model
     use HasFactory;
     protected $fillable = [
         'transaction_number',
+        'cashier_name',
+        'payment_method_name',
+        'payment_amount',
+        'payment_status',
+        'customer_name',
         'transaction_date',
         'cashier_id',
         'customer_id',

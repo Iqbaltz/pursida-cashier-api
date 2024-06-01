@@ -59,6 +59,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'barang'], function () {
     Route::get('/', [BarangController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [BarangController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [BarangController::class, 'detail'])->name('detail');
     Route::post('/', [BarangController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangController::class, 'update'])->name('update');
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'barang-transaction'], function () {
     Route::get('/', [BarangTransactionController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [BarangTransactionController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [BarangTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [BarangTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [BarangTransactionController::class, 'update'])->name('update');
@@ -91,6 +93,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'cashier-transaction'], function () {
     Route::get('/', [CashierTransactionController::class, '__invoke'])->name('all');
+    Route::get('/print-receipt/{id}', [CashierTransactionController::class, 'print_receipt'])->name('print_receipt');
     Route::get('/{id}', [CashierTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [CashierTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CashierTransactionController::class, 'update'])->name('update');
