@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DaftarBarangExport;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BarangController extends Controller
 {
@@ -105,5 +107,12 @@ class BarangController extends Controller
             'message' => 'Barang successfully deleted',
             'data' => $barang
         ]);
+    }
+
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar barang {$date}.xlsx";
+        return Excel::download(new DaftarBarangExport, $filename);
     }
 }
