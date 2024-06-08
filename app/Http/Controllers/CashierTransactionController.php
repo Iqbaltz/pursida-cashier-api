@@ -61,7 +61,7 @@ class CashierTransactionController extends Controller
     {
         $cashier_transactions = CashierTransaction::with([
             'cashier', 'customer', 'payment_method', 'transaction_items'
-        ])->paginate($this->per_page());
+        ])->orderBy('updated_at', 'desc')->paginate($this->per_page());
 
         return response()->json([
             'message' => 'data successfully retrieved',
