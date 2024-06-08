@@ -97,7 +97,7 @@ class CashierTransactionController extends Controller
             'items' => 'required|array',
             'items.*.barang_id' => 'required|integer|exists:barangs,id',
             'items.*.transaction_type' => 'required|in:satuan,grosir,reseller',
-            'items.*.qty' => 'required|integer|min:1',
+            'items.*.qty' => 'required|numeric|min:0',
         ]);
 
         $cashierTransactionId = null;
@@ -170,7 +170,7 @@ class CashierTransactionController extends Controller
             'items.*.id' => 'nullable|integer|exists:cashier_transaction_items,id',
             'items.*.barang_id' => 'required|integer|exists:barangs,id',
             'items.*.transaction_type' => 'required|in:satuan,grosir,reseller',
-            'items.*.qty' => 'required|integer|min:1',
+            'items.*.qty' => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($validatedData, $id, $request) {

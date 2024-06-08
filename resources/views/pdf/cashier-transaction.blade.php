@@ -82,7 +82,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">Diskon (%)</td>
-                        <td>{{ $diskon }}</td>
+                        <td>{{ number_format($diskon, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">Total</td>
