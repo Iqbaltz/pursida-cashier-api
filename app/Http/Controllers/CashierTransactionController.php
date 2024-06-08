@@ -109,6 +109,7 @@ class CashierTransactionController extends Controller
 
             $barangs = Barang::all();
             $subtotal = $this->get_subtotal_from_request($barangs, $request->items);
+            $subtotal = $subtotal - $validatedData['discount'];
             $cashier = User::find($request->cashier_id);
             $payment_method = PaymentMethods::find($request->payment_method_id);
             $customer = null;
@@ -127,7 +128,7 @@ class CashierTransactionController extends Controller
                 'payment_method_id' => $validatedData['payment_method_id'],
                 'discount' => $validatedData['discount'],
                 'payment_amount' => $validatedData['payment_amount'],
-                'payment_status' => $subtotal - $validatedData['payment_amount'] < 0 ? 1 : 0
+                'payment_status' => $subtotal - $validatedData['payment_amount'] <= 0 ? 1 : 0
             ]);
 
             $cashierTransactionId = $cashierTransaction->id;
@@ -185,6 +186,7 @@ class CashierTransactionController extends Controller
             }
             $barangs = Barang::all();
             $subtotal = $this->get_subtotal_from_request($barangs, $request->items);
+            $subtotal = $subtotal - $validatedData['discount'];
             // Update the cashier transaction
             $updatedData = [
                 'cashier_name' => $cashier->name,
@@ -196,7 +198,7 @@ class CashierTransactionController extends Controller
                 'payment_method_id' => $validatedData['payment_method_id'],
                 'discount' => $validatedData['discount'],
                 'payment_amount' => $validatedData['payment_amount'],
-                'payment_status' => $subtotal - $validatedData['payment_amount'] < 0 ? 1 : 0
+                'payment_status' => $subtotal - $validatedData['payment_amount'] <= 0 ? 1 : 0
             ];
 
             if (isset($validatedData['transaction_number'])) {
