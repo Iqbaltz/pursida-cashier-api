@@ -47,6 +47,17 @@
             padding: 8px;
             text-align: left;
         }
+        /* Target the table with class "table-info" */
+        .table-info {
+            border-collapse: collapse; /* Ensure no space between table cells */
+            border: none; /* Remove the outer border */
+            margin-bottom: 16px;
+        }
+
+        .table-info td {
+            border: none; /* Remove the borders from table cells */
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -57,7 +68,23 @@
             <p>Jl. Asahan Km. VI, Depan Polres<br>Telepon: 087776827032</p>
         </div>
         <div class="content">
-            <p>No. Nota: {{ $no_nota }}<br>Kasir: {{ $kasir }}<br>Pelanggan: {{ $pelanggan }}</p>
+            <table class="table-info">
+                <tbody>
+                    <tr>
+                        <td>
+                            No. Nota: {{ $no_nota }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Kasir : {{ $kasir }}</td>
+                        <td>Alamat : {{ $alamat }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pelanggan : {{ $pelanggan }}</td>
+                        <td>No. HP : {{ $no_telp }}</td>
+                    </tr>
+                </tbody>
+            </table>
             <table>
                 <thead>
                     <tr>
