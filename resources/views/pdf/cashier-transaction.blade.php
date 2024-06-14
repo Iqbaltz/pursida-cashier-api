@@ -36,27 +36,46 @@
             border-collapse: collapse;
         }
 
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
+        table th, 
+        table td {
+            border-bottom: 1px dashed black; /* Horizontal dashed borders */
             padding: 8px;
             text-align: left;
         }
-        /* Target the table with class "table-info" */
+        
+        tfoot td{
+            border-bottom:none;
+        }
+
+        table th {
+            border-right: 1px dashed black; /* Vertical dashed border for table header */
+        }
+
+        table td {
+            border-right: 1px dashed black; /* Vertical dashed border for table data */
+        }
+
+        table th:last-child, 
+        table td:last-child {
+            border-right: none; /* Remove right border for last column */
+        }
+
         .table-info {
-            border-collapse: collapse; /* Ensure no space between table cells */
-            border: none; /* Remove the outer border */
+            border-collapse: collapse;
             margin-bottom: 16px;
         }
 
         .table-info td {
-            border: none; /* Remove the borders from table cells */
-            padding: 0;
+            border: none;
+            padding: 2px;
+        }
+
+        .table-info td:first-child {
+            width: 50%;
+        }
+
+        .no-border {
+            border: none;
         }
     </style>
 </head>
@@ -71,17 +90,15 @@
             <table class="table-info">
                 <tbody>
                     <tr>
-                        <td>
-                            No. Nota: {{ $no_nota }}
-                        </td>
+                        <td colspan="2">No. Nota: {{ $no_nota }}</td>
                     </tr>
                     <tr>
-                        <td>Kasir : {{ $kasir }}</td>
-                        <td>Alamat : {{ $alamat }}</td>
+                        <td>Kasir: {{ $kasir }}</td>
+                        <td>Alamat: {{ $alamat }}</td>
                     </tr>
                     <tr>
-                        <td>Pelanggan : {{ $pelanggan }}</td>
-                        <td>No. HP : {{ $no_telp }}</td>
+                        <td>Pelanggan: {{ $pelanggan }}</td>
+                        <td>No. HP: {{ $no_telp }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -95,11 +112,11 @@
                 </thead>
                 <tbody>
                     @foreach ($items as $item)
-                        <tr>
-                            <td>{{ $item['name'] }}</td>
-                            <td>{{ $item['qty'] }}</td>
-                            <td>{{ number_format($item['amount'], 0, ',', '.') }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ $item['name'] }}</td>
+                        <td>{{ $item['qty'] }}</td>
+                        <td>{{ number_format($item['amount'], 0, ',', '.') }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
@@ -112,11 +129,11 @@
                         <td>{{ number_format($diskon, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Total</td>
+                        <td colspan="2">Total Tagihan</td>
                         <td>{{ number_format($total, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Tunai</td>
+                        <td colspan="2">Total Bayar</td>
                         <td>{{ number_format($tunai, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
