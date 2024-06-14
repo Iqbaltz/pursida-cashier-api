@@ -61,11 +61,20 @@ class CashierTransactionController extends Controller
     {
         $cashier_transactions = CashierTransaction::with([
             'cashier', 'customer', 'payment_method', 'transaction_items'
-        ])->orderBy('updated_at', 'desc')->paginate($this->per_page());
+        ])->orderBy('updated_at', 'desc');
+
+        if ($request->search) {
+            $cashier_transactions->where('transaction_number', 'LIKE', "%$request->search%")
+                ->orWhereHas('cashier', function ($q) use ($request) {
+                    $q->where('name', 'LIKE', "%$request->search%");
+                })->orWhereHas('customer', function ($q) use ($request) {
+                    $q->where('name', 'LIKE', "%$request->search%");
+                });
+        }
 
         return response()->json([
             'message' => 'data successfully retrieved',
-            'data' => $cashier_transactions
+            'data' => $cashier_transactions->paginate($this->per_page())
         ]);
     }
 
