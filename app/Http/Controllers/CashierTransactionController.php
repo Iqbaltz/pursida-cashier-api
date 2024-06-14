@@ -290,6 +290,8 @@ class CashierTransactionController extends Controller
             'no_nota' => $transaction->transaction_number,
             'kasir' => $transaction->cashier_name,
             'pelanggan' => $transaction->customer_name,
+            'alamat' => $transaction->customer ? $transaction->customer->address : '-',
+            'no_telp' => $transaction->customer ? $transaction->customer->phone : '-',
             'items' => $transaction->transaction_items->map(fn ($x) => [
                 'name' => $x->barang_name,
                 'qty' => $x->qty,
