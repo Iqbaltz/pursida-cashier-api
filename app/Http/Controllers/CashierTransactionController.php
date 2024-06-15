@@ -143,7 +143,14 @@ class CashierTransactionController extends Controller
             $cashierTransactionId = $cashierTransaction->id;
             // Create each cashier transaction item
             foreach ($validatedData['items'] as $item) {
-                $barang = $this->search_barang($barangs, $item['barang_id']);
+                $barang = Barang::find($item['barang_id']);
+                if ($barang->hitung_stok == true) {
+                    if ($barang->stok < $item['qty']) {
+                        throw new \Exception("Insufficient stock for item: {$barang->name}");
+                    }
+                    $barang->stok = $barang->stok - $item['qty'];
+                }
+                $barang->save();
                 CashierTransactionItem::create([
                     'cashier_transaction_id' => $cashierTransaction->id,
                     'barang_id' => $item['barang_id'],
