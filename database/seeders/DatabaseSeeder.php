@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             // UsersTableSeeder::class,
             // PaymentMethodsSeeder::class,
             // CategorySeeder::class,
-            StoreInformationSeeder::class
+            // StoreInformationSeeder::class,
+            BarangSeeder::class
         ]);
     }
 }
