@@ -14,7 +14,7 @@ class BarangTransactionController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $barang_transactions = BarangTransaction::with('supplier', 'barang')->orderBy('transaction_date', 'desc');
+        $barang_transactions = BarangTransaction::with('supplier', 'barang');
         if ($request->search) {
             $barang_transactions->whereHas('supplier', function ($q) use ($request) {
                 $q->where('name', 'LIKE', "%$request->search%");
@@ -22,11 +22,15 @@ class BarangTransactionController extends Controller
                 $q->where('name', 'LIKE', "%$request->search%");
             });
         }
-        if ($request->order_by) {
-            $order = explode(',', $request->order_by);
-            $order = array_chunk($order, 2);
-            for ($i = 0; $i < count($order); $i++) {
-                $barang_transactions->orderBy($order[$i][0], $order[$i][1]);
+        if ($request->orders) {
+            foreach ($request->orders as $orderObj) {
+                $orderBy = $orderObj['id'];
+                $orderType = $orderObj['desc'] == 'false' ? 'ASC' : 'DESC';
+                if ($orderBy == 'total') {
+                    $barang_transactions->orderByRaw('harga_beli * jumlah ' . $orderType);
+                } else {
+                    $barang_transactions->orderBy($orderBy, $orderType);
+                }
             }
         } else {
             $barang_transactions->orderBy('updated_at', 'DESC');
