@@ -61,7 +61,7 @@ class CashierTransactionController extends Controller
     {
         $cashier_transactions = CashierTransaction::with([
             'cashier', 'customer', 'payment_method', 'transaction_items'
-        ])->orderBy('updated_at', 'desc');
+        ]);
 
         if ($request->search) {
             $cashier_transactions->where('transaction_number', 'LIKE', "%$request->search%")
@@ -70,6 +70,27 @@ class CashierTransactionController extends Controller
                 })->orWhereHas('customer', function ($q) use ($request) {
                     $q->where('name', 'LIKE', "%$request->search%");
                 });
+        }
+        if ($request->orders) {
+            foreach ($request->orders as $orderObj) {
+                $orderBy = $orderObj['id'];
+                $orderType = $orderObj['desc'] == 'false' ? 'ASC' : 'DESC';
+                if ($orderBy == 'total_items') {
+                    $cashier_transactions->select('cashier_transactions.*')
+                        ->leftJoin('cashier_transaction_items', 'cashier_transaction_items.cashier_transaction_id', '=', 'cashier_transactions.id')
+                        ->groupBy('cashier_transactions.id')
+                        ->orderByRaw('SUM(cashier_transaction_items.qty) ' . $orderType);
+                } else if ($orderBy == 'total_payment') {
+                    $cashier_transactions->select('cashier_transactions.*')
+                        ->leftJoin('cashier_transaction_items', 'cashier_transaction_items.cashier_transaction_id', '=', 'cashier_transactions.id')
+                        ->groupBy('cashier_transactions.id')
+                        ->orderByRaw('SUM(cashier_transaction_items.price_per_barang * cashier_transaction_items.qty) ' . $orderType);
+                } else {
+                    $cashier_transactions->orderBy($orderBy, $orderType);
+                }
+            }
+        } else {
+            $cashier_transactions->orderBy('updated_at', 'DESC');
         }
 
         return response()->json([
