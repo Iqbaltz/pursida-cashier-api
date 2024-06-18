@@ -323,6 +323,7 @@ class CashierTransactionController extends Controller
             'items' => $transaction->transaction_items->map(fn ($x) => [
                 'name' => $x->barang_name,
                 'qty' => $x->qty,
+                'price' => $x->price_per_barang,
                 'amount' => $x->qty * $x->price_per_barang
             ]),
             'subtotal' => $subtotal,
