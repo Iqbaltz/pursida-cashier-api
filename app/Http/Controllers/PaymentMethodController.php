@@ -49,7 +49,7 @@ class PaymentMethodController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:payment_mehods,name|string|max:255',
+            'name' => 'required|unique:payment_methods,name,' . $id . '|string|max:255',
         ]);
 
         $payment_method = PaymentMethods::find($id);

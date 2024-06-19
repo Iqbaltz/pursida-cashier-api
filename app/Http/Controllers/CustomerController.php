@@ -48,7 +48,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|unique:customers,name,' . $id . '|max:255',
             'address' => 'required|string|max:255',
             'phone_number' => 'required|string|max:255',
         ]);
