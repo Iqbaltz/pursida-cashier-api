@@ -59,7 +59,7 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:barangs,name|string|max:255',
+            'name' => 'required|unique:barangs,name,' . $id . '|string|max:255',
             'category_id' => 'integer|exists:categories,id',
             'hitung_stok' => 'boolean',
             'harga_modal' => 'required|integer',

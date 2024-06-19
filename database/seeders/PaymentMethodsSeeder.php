@@ -20,35 +20,27 @@ class PaymentMethodsSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         PaymentMethods::insert([
             [
-                'slug' => 'tunai',
                 'name' => 'Tunai',
             ],
             [
-                'slug' => 'ovo',
                 'name' => 'OVO',
             ],
             [
-                'slug' => 'gopay',
                 'name' => 'Gopay',
             ],
             [
-                'slug' => 'shopee-pay',
                 'name' => 'Shopee Pay',
             ],
             [
-                'slug' => 'debit-bca',
                 'name' => 'Debit BCA',
             ],
             [
-                'slug' => 'debit-mandiri',
                 'name' => 'Debit Mandiri',
             ],
             [
-                'slug' => 'debit-bri',
                 'name' => 'Debit BRI',
             ],
             [
-                'slug' => 'debit-bni',
                 'name' => 'Debit BNI',
             ],
         ]);
