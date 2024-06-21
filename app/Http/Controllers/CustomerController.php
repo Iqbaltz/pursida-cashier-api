@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CustomerExport;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -82,5 +84,11 @@ class CustomerController extends Controller
             'message' => 'Customer successfully deleted',
             'data' => $customer
         ]);
+    }
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar customer - {$date}.xlsx";
+        return Excel::download(new CustomerExport, $filename);
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SupplierExport;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SupplierController extends Controller
 {
@@ -82,5 +84,11 @@ class SupplierController extends Controller
             'message' => 'Supplier successfully deleted',
             'data' => $supplier
         ]);
+    }
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar Supplier - {$date}.xlsx";
+        return Excel::download(new SupplierExport, $filename);
     }
 }

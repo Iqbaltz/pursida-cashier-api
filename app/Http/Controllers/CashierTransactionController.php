@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CashierTransactionExport;
 use App\Models\Barang;
 use App\Models\CashierTransaction;
 use App\Models\CashierTransactionItem;
@@ -12,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CashierTransactionController extends Controller
 {
@@ -337,5 +339,17 @@ class CashierTransactionController extends Controller
         $filename = "invoice {$transaction->transaction_number}.pdf";
 
         return $pdf->stream($filename);
+    }
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar transaksi kasir - {$date}.xlsx";
+        $start_date = $request->start_date ?? null;
+        $end_date = $request->end_date ?? null;
+        if ($start_date || $end_date) {
+            $filename = "Daftar transaksi kasir - {$date} - filtered.xlsx";
+        }
+        // date format: 2024-01-01
+        return Excel::download(new CashierTransactionExport($start_date, $end_date), $filename);
     }
 }

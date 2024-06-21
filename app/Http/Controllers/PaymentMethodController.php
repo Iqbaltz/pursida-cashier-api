@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PaymentMethodExport;
 use App\Models\PaymentMethods;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentMethodController extends Controller
 {
@@ -79,5 +81,11 @@ class PaymentMethodController extends Controller
             'message' => 'Payment Method successfully deleted',
             'data' => $payment_method
         ]);
+    }
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar Metode Pembayaran - {$date}.xlsx";
+        return Excel::download(new PaymentMethodExport, $filename);
     }
 }

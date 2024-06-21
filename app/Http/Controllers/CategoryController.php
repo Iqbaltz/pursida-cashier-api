@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CategoryExport;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -80,5 +82,11 @@ class CategoryController extends Controller
             'message' => 'Category successfully deleted',
             'data' => $category
         ]);
+    }
+    public function export_excel(Request $request)
+    {
+        $date = get_indo_date(date('Y-m-d'));
+        $filename = "Daftar Kategori - {$date}.xlsx";
+        return Excel::download(new CategoryExport, $filename);
     }
 }

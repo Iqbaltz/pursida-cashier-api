@@ -43,6 +43,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'category'], function () {
     Route::get('/', [CategoryController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [CategoryController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [CategoryController::class, 'detail'])->name('detail');
     Route::post('/', [CategoryController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CategoryController::class, 'update'])->name('update');
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'payment-method'], function () {
     Route::get('/', [PaymentMethodController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [PaymentMethodController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [PaymentMethodController::class, 'detail'])->name('detail');
     Route::post('/', [PaymentMethodController::class, 'insert'])->name('insert');
     Route::post('/{id}', [PaymentMethodController::class, 'update'])->name('update');
@@ -68,6 +70,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'supplier'], function () {
     Route::get('/', [SupplierController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [SupplierController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [SupplierController::class, 'detail'])->name('detail');
     Route::post('/', [SupplierController::class, 'insert'])->name('insert');
     Route::post('/{id}', [SupplierController::class, 'update'])->name('update');
@@ -76,6 +79,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'customer'], function () {
     Route::get('/', [CustomerController::class, '__invoke'])->name('all');
+    Route::get('/export-excel', [CustomerController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [CustomerController::class, 'detail'])->name('detail');
     Route::post('/', [CustomerController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CustomerController::class, 'update'])->name('update');
@@ -94,6 +98,7 @@ Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'cashier-transaction'], function () {
     Route::get('/', [CashierTransactionController::class, '__invoke'])->name('all');
     Route::get('/print-receipt/{id}', [CashierTransactionController::class, 'print_receipt'])->name('print_receipt');
+    Route::get('/export-excel', [CashierTransactionController::class, 'export_excel'])->name('export_excel');
     Route::get('/{id}', [CashierTransactionController::class, 'detail'])->name('detail');
     Route::post('/', [CashierTransactionController::class, 'insert'])->name('insert');
     Route::post('/{id}', [CashierTransactionController::class, 'update'])->name('update');
