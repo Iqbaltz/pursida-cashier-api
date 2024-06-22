@@ -302,6 +302,42 @@ class CashierTransactionController extends Controller
         ]);
     }
 
+    public function get_receipt_html(Request $request, $id)
+    {
+        $transaction = CashierTransaction::with([
+            'cashier', 'customer', 'payment_method', 'transaction_items' => function ($q) {
+                $q->with('barang');
+            }
+        ])->find($id);
+        if (!$transaction) {
+            return response()->json([
+                'error' => 'Transaction not found',
+            ], 404);
+        }
+        $subtotal = $this->get_subtotal($transaction->transaction_items);
+        $total = $subtotal - $transaction->discount;
+        $data = [
+            'no_nota' => $transaction->transaction_number,
+            'kasir' => $transaction->cashier_name,
+            'pelanggan' => $transaction->customer_name,
+            'alamat' => $transaction->customer ? $transaction->customer->address : '-',
+            'no_telp' => $transaction->customer ? $transaction->customer->phone_number : '-',
+            'items' => $transaction->transaction_items->map(fn ($x) => [
+                'name' => $x->barang_name,
+                'qty' => $x->qty,
+                'price' => $x->price_per_barang,
+                'amount' => $x->qty * $x->price_per_barang
+            ]),
+            'subtotal' => $subtotal,
+            'diskon' => $transaction->discount,
+            'total' => $total,
+            'tunai' => $transaction->payment_amount,
+            'kembalian' => -1 * ($total - $transaction->payment_amount),
+        ];
+
+        return view('pdf/cashier-transaction-html', $data);
+    }
+
     public function print_receipt(Request $request, $id)
     {
         $transaction = CashierTransaction::with([
@@ -336,6 +372,13 @@ class CashierTransactionController extends Controller
         ];
 
         $pdf = Pdf::loadView('pdf/cashier-transaction', $data);
+        $content = view('pdf/cashier-transaction', $data)->render();
+        $lineHeight = 1.75; // Adjust based on your font size and line height
+        $numberOfLines = substr_count($content, "\n") + 1;
+        $estimatedHeight = $numberOfLines * $lineHeight;
+
+        // Set paper size to fit the content
+        $pdf->setPaper([0, 0, 226.77, $estimatedHeight], 'portrait');
         $filename = "invoice {$transaction->transaction_number}.pdf";
 
         return $pdf->stream($filename);

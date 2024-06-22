@@ -14,11 +14,11 @@
         }
 
         .container {
-            width: 130%;
+            width: 100%;
             max-width: 120mm;
             /* Set max width to typical receipt width */
             margin: 0 auto;
-            margin-left: -15%;
+            margin-left: 0%;
             padding: 5px;
             /* Adjust padding for better fit */
         }
@@ -50,7 +50,7 @@
 
         table th,
         table td {
-            border-bottom: 1px dashed black;
+            border-bottom: 1px dashed rgb(88, 88, 88);
             padding: 2px;
             /* Adjust padding for better fit */
             text-align: left;
@@ -58,14 +58,19 @@
 
         tfoot td {
             border-bottom: none;
+            border-left: none;
+        }
+
+        tfoot tr td:first-child {
+            border-right: none;
         }
 
         table th {
-            border-right: 1px dashed black;
+            border-right: 1px dashed rgb(88, 88, 88);
         }
 
         table td {
-            border-right: 1px dashed black;
+            border-right: 1px dashed rgb(88, 88, 88);
         }
 
         table th:last-child,
@@ -142,23 +147,28 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="3">Subtotal</td>
+                        <td></td>
+                        <td colspan="2">Subtotal</td>
                         <td>{{ number_format($subtotal, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3">Diskon (%)</td>
+                        <td></td>
+                        <td colspan="2">Diskon (%)</td>
                         <td>{{ number_format($diskon, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3">Total Tagihan</td>
+                        <td></td>
+                        <td colspan="2">Total Tagihan</td>
                         <td>{{ number_format($total, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3">Total Bayar</td>
+                        <td></td>
+                        <td colspan="2">Total Bayar</td>
                         <td>{{ number_format($tunai, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3">Kembalian</td>
+                        <td></td>
+                        <td colspan="2">Kembalian</td>
                         <td>{{ number_format($kembalian, 0, ',', '.') }}</td>
                     </tr>
                 </tfoot>
