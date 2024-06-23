@@ -19,7 +19,6 @@
             /* Set max width to typical receipt width */
             margin: 0 auto;
             margin-left: -15%;
-            padding: 5px;
             /* Adjust padding for better fit */
         }
 
@@ -84,10 +83,6 @@
             padding: 2px;
         }
 
-        .table-info td:first-child {
-            width: 50%;
-        }
-
         .no-border {
             border: none;
         }
@@ -108,16 +103,19 @@
         <div class="content">
             <table class="table-info">
                 <tbody>
-                    <tr>
-                        <td colspan="2">No. Nota: {{ $no_nota }}</td>
-                    </tr>
-                    <tr>
-                        <td>Kasir: {{ $kasir }}</td>
-                        <td>Alamat: {{ $alamat }}</td>
+                <tr>
+                    <td>No. Nota: {{ $no_nota }}</td>
+                    <td>{{date('d-m-Y')}}</td>
                     </tr>
                     <tr>
                         <td>Pelanggan: {{ $pelanggan }}</td>
-                        <td>No. HP: {{ $no_telp }}</td>
+                        <td>Kasir: {{ $kasir }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Alamat: {{ $alamat }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No. HP: {{ $no_telp }}</td>
                     </tr>
                 </tbody>
             </table>

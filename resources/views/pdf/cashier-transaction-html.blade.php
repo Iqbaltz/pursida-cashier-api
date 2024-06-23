@@ -89,10 +89,6 @@
             padding: 2px;
         }
 
-        .table-info td:first-child {
-            width: 50%;
-        }
-
         .no-border {
             border: none;
         }
@@ -114,15 +110,18 @@
             <table class="table-info">
                 <tbody>
                     <tr>
-                        <td colspan="2">No. Nota: {{ $no_nota }}</td>
-                    </tr>
-                    <tr>
-                        <td>Kasir: {{ $kasir }}</td>
-                        <td>Alamat: {{ $alamat }}</td>
+                        <td>No. Nota: {{ $no_nota }}</td>
+                        <td>{{date('d-m-Y')}}</td>
                     </tr>
                     <tr>
                         <td>Pelanggan: {{ $pelanggan }}</td>
-                        <td>No. HP: {{ $no_telp }}</td>
+                        <td>Kasir: {{ $kasir }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Alamat: {{ $alamat }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No. HP: {{ $no_telp }}</td>
                     </tr>
                 </tbody>
             </table>
