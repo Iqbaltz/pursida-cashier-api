@@ -178,6 +178,7 @@ class CashierTransactionController extends Controller
                     'cashier_transaction_id' => $cashierTransaction->id,
                     'barang_id' => $item['barang_id'],
                     'barang_name' => $barang->name,
+                    'price_modal' => $barang->harga_modal,
                     'price_per_barang' => $this->get_harga_barang($barang, $item['transaction_type']),
                     'transaction_type' => $item['transaction_type'],
                     'qty' => $item['qty'],
@@ -261,6 +262,7 @@ class CashierTransactionController extends Controller
                     CashierTransactionItem::where('id', $item['id'])->update([
                         'barang_id' => $item['barang_id'],
                         'barang_name' => $barang->name,
+                        'price_modal' => $barang->harga_modal,
                         'price_per_barang' => $this->get_harga_barang($barang, $item['transaction_type']),
                         'transaction_type' => $item['transaction_type'],
                         'qty' => $item['qty'],
@@ -271,6 +273,7 @@ class CashierTransactionController extends Controller
                         'cashier_transaction_id' => $cashierTransaction->id,
                         'barang_id' => $item['barang_id'],
                         'barang_name' => $barang->name,
+                        'price_modal' => $barang->harga_modal,
                         'price_per_barang' => $this->get_harga_barang($barang, $item['transaction_type']),
                         'transaction_type' => $item['transaction_type'],
                         'qty' => $item['qty'],
