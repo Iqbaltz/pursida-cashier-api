@@ -12,7 +12,7 @@ class CashierTransactionItem extends Model
         'cashier_transaction_id',
         'barang_id',
         'barang_name',
-        'harga_modal',
+        'price_modal',
         'price_per_barang',
         'transaction_type',
         'qty',
