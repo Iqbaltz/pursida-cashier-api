@@ -128,6 +128,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>Nama Barang</th>
                         <th>Qty</th>
                         <th>Harga</th>
@@ -137,6 +138,7 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr>
+                            <td>{{ $item['no'] }}</td>
                             <td>{{ $item['name'] }}</td>
                             <td>{{ $item['qty'] }}</td>
                             <td>{{ number_format($item['price'], 0, ',', '.') }}</td>
@@ -146,27 +148,27 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td></td>
+                        <td colspan="2"></td>
                         <td colspan="2">Subtotal</td>
                         <td>{{ number_format($subtotal, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td colspan="2"></td>
                         <td colspan="2">Diskon (%)</td>
                         <td>{{ number_format($diskon, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td colspan="2"></td>
                         <td colspan="2">Total Tagihan</td>
                         <td>{{ number_format($total, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td colspan="2"></td>
                         <td colspan="2">Total Bayar</td>
                         <td>{{ number_format($tunai, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td colspan="2"></td>
                         <td colspan="2">Kembalian</td>
                         <td>{{ number_format($kembalian, 0, ',', '.') }}</td>
                     </tr>
