@@ -325,7 +325,8 @@ class CashierTransactionController extends Controller
             'pelanggan' => $transaction->customer_name,
             'alamat' => $transaction->customer ? $transaction->customer->address : '-',
             'no_telp' => $transaction->customer ? $transaction->customer->phone_number : '-',
-            'items' => $transaction->transaction_items->map(fn ($x) => [
+            'items' => $transaction->transaction_items->map(fn ($x, $idx) => [
+                'no' => $idx + 1,
                 'name' => $x->barang_name,
                 'qty' => $x->qty,
                 'price' => $x->price_per_barang,
@@ -361,7 +362,8 @@ class CashierTransactionController extends Controller
             'pelanggan' => $transaction->customer_name,
             'alamat' => $transaction->customer ? $transaction->customer->address : '-',
             'no_telp' => $transaction->customer ? $transaction->customer->phone_number : '-',
-            'items' => $transaction->transaction_items->map(fn ($x) => [
+            'items' => $transaction->transaction_items->map(fn ($x, $idx) => [
+                'no' => $idx + 1,
                 'name' => $x->barang_name,
                 'qty' => $x->qty,
                 'price' => $x->price_per_barang,
@@ -376,12 +378,12 @@ class CashierTransactionController extends Controller
 
         $pdf = Pdf::loadView('pdf/cashier-transaction', $data);
         $content = view('pdf/cashier-transaction', $data)->render();
-        $lineHeight = 1.75; // Adjust based on your font size and line height
-        $numberOfLines = substr_count($content, "\n") + 1;
+        $lineHeight = 2; // Adjust based on your font size and line height
+        $numberOfLines = substr_count($content, "\n") + 2;
         $estimatedHeight = $numberOfLines * $lineHeight;
 
         // Set paper size to fit the content
-        $pdf->setPaper([0, 0, 226.77, $estimatedHeight], 'portrait');
+        $pdf->setPaper([0, 0, 240, $estimatedHeight], 'portrait');
         $filename = "invoice {$transaction->transaction_number}.pdf";
 
         return $pdf->stream($filename);
