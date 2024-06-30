@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\CashierTransactionExport;
 use App\Models\Barang;
 use App\Models\CashierTransaction;
+use App\Models\StoreInformation;
 use App\Models\CashierTransactionItem;
 use App\Models\Customer;
 use App\Models\PaymentMethods;
@@ -312,14 +313,21 @@ class CashierTransactionController extends Controller
                 $q->with('barang');
             }
         ])->find($id);
+
+        $store_information = StoreInformation::first();
+
         if (!$transaction) {
             return response()->json([
                 'error' => 'Transaction not found',
             ], 404);
         }
+
         $subtotal = $this->get_subtotal($transaction->transaction_items);
         $total = $subtotal - $transaction->discount;
         $data = [
+            'store_name' => $store_information->name,
+            'store_address' => $store_information->address,
+            'store_phone_number' => $store_information->phone_number,
             'no_nota' => $transaction->transaction_number,
             'kasir' => $transaction->cashier_name,
             'pelanggan' => $transaction->customer_name,
@@ -349,6 +357,9 @@ class CashierTransactionController extends Controller
                 $q->with('barang');
             }
         ])->find($id);
+
+        $store_information = StoreInformation::first();
+
         if (!$transaction) {
             return response()->json([
                 'error' => 'Transaction not found',
@@ -357,6 +368,9 @@ class CashierTransactionController extends Controller
         $subtotal = $this->get_subtotal($transaction->transaction_items);
         $total = $subtotal - $transaction->discount;
         $data = [
+            'store_name' => $store_information->name,
+            'store_address' => $store_information->address,
+            'store_phone_number' => $store_information->phone_number,
             'no_nota' => $transaction->transaction_number,
             'kasir' => $transaction->cashier_name,
             'pelanggan' => $transaction->customer_name,

@@ -102,8 +102,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>UD. PURSIDA</h2>
-            <p>Jl. Asahan Km. VI, Depan Polres<br>Telepon: 087776827032</p>
+            <h2>{{ $store_name }}</h2>
+            <p>{{ $store_address }}<br>Telepon: {{ $store_phone_number }}</p>
         </div>
         <div class="content">
             <table class="table-info">
