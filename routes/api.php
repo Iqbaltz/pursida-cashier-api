@@ -31,6 +31,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::get('me', [AuthController::class, 'me'])->name('me');
+    Route::post('change-password', [AuthController::class, 'change_password'])->name('change_password');
 });
 
 Route::group(['middleware' => ['api', 'auth:api', 'check.token.expiry'], 'prefix' => 'users'], function () {

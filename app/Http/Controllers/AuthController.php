@@ -84,4 +84,32 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+
+    public function change_password(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required|string|min:6',
+            'new_password' => 'required|string|min:6',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::find(auth()->user()->id);
+
+        if (!password_verify($request->get('old_password'), $user->password)) {
+            return response()->json([
+                'error' => 'Old password is incorrect',
+            ], 400);
+        }
+
+        $user->password = bcrypt($request->get('new_password'));
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password successfully changed',
+        ]);
+    }
 }
