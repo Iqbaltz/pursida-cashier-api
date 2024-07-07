@@ -51,6 +51,7 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
             'Kas Masuk',
             'Kekurangan Pembayaran',
             'Profit',
+            'Total Profit',
             'Status'
         ];
     }
@@ -99,11 +100,9 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
                 $totalAllHargaJual += $item->price_per_barang;
                 $totalAllQty += $item->qty;
                 $totalAllJumlah += $total_per_barang;
-                $totalAllSubtotal += $totalPrice;
                 $totalAllDiscount += $item->discount;
-                $totalAllTotal += $totalPrice - $item->discount;
-                $totalAllCashIn += $transaction->payment_amount;
-                $totalAllRemainingPayment += $totalPrice - $item->discount - $transaction->payment_amount;
+                $totalAllTotal += $total_per_barang - $item->discount;
+                $totalAllRemainingPayment += $total_per_barang - $item->discount;
                 $totalAllProfit += $profit;
                 if ($transaction->status) {
                     $totalAllStatus++;
@@ -128,10 +127,14 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
                     'total' => ($totalPrice - $item->discount) ?? '0',
                     'cash_in' => $transaction->payment_amount ?? '0',
                     'remaining_payment' => ($totalPrice - $item->discount - $transaction->payment_amount) ?? '0',
-                    'profit' => $totalProfit ?? '0',
+                    'profit' => $profit ?? '0',
+                    'total_profit' => $totalProfit ?? '0',
                     'status' => $transaction->status ? 'Lunas' : 'Belum Lunas',
                 ];
             }
+            $totalAllSubtotal += $totalPrice;
+            $totalAllCashIn += $transaction->payment_amount;
+            $totalAllRemainingPayment -= $transaction->payment_amount;
         }
         $totals = [
             'number' => '',
@@ -153,6 +156,7 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
             'cash_in' => strval($totalAllCashIn),
             'remaining_payment' => strval($totalAllRemainingPayment),
             'profit' => strval($totalAllProfit),
+            'total_profit' => strval($totalAllProfit),
             'status' => strval($totalAllStatus),
         ];
 
@@ -183,6 +187,7 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
             'R' => 20,
             'S' => 20,
             'T' => 20,
+            'U' => 20,
         ];
     }
 
@@ -205,46 +210,47 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
                     $endRow = $i + 1;
 
                     if ($startRow != $endRow) {
-                        $sheet->mergeCells("A{$startRow}:A{$endRow}");
-                        $sheet->mergeCells("C{$startRow}:C{$endRow}");
-                        $sheet->mergeCells("D{$startRow}:D{$endRow}");
-                        $sheet->mergeCells("E{$startRow}:E{$endRow}");
-                        $sheet->mergeCells("F{$startRow}:F{$endRow}");
-                        $sheet->mergeCells("G{$startRow}:G{$endRow}");
-                        $sheet->mergeCells("M{$startRow}:M{$endRow}");
-                        $sheet->mergeCells("N{$startRow}:N{$endRow}");
-                        $sheet->mergeCells("O{$startRow}:O{$endRow}");
-                        $sheet->mergeCells("P{$startRow}:P{$endRow}");
-                        $sheet->mergeCells("Q{$startRow}:Q{$endRow}");
-                        $sheet->mergeCells("R{$startRow}:R{$endRow}");
-                        $sheet->mergeCells("S{$startRow}:S{$endRow}");
-
-                        // Set the values from the top item to the merged cells
+                        // Set the values from the bottom item to the merged cells
                         $sheet->setCellValue("A{$startRow}", $data[$startRow - 1][0]);
                         $sheet->setCellValue("C{$startRow}", $data[$startRow - 1][2]);
                         $sheet->setCellValue("D{$startRow}", $data[$startRow - 1][3]);
                         $sheet->setCellValue("E{$startRow}", $data[$startRow - 1][4]);
                         $sheet->setCellValue("F{$startRow}", $data[$startRow - 1][5]);
                         $sheet->setCellValue("G{$startRow}", $data[$startRow - 1][6]);
-                        $sheet->setCellValue("M{$startRow}", $data[$startRow - 1][12]);
-                        $sheet->setCellValue("N{$startRow}", $data[$startRow - 1][13]);
+                        $sheet->setCellValue("N{$startRow}", $data[$endRow - 1][13]);
                         $sheet->setCellValue("O{$startRow}", $data[$startRow - 1][14]);
-                        $sheet->setCellValue("P{$startRow}", $data[$startRow - 1][15]);
-                        $sheet->setCellValue("Q{$startRow}", $data[$startRow - 1][16]);
-                        $sheet->setCellValue("R{$startRow}", $data[$startRow - 1][17]);
-                        $sheet->setCellValue("S{$startRow}", $data[$startRow - 1][18]);
+                        $sheet->setCellValue("P{$startRow}", $data[$endRow - 1][15]);
+                        $sheet->setCellValue("Q{$startRow}", $data[$endRow - 1][16]);
+                        $sheet->setCellValue("R{$startRow}", $data[$endRow - 1][17]);
+                        $sheet->setCellValue("T{$startRow}", $data[$endRow - 1][19]);
+                        $sheet->setCellValue("U{$startRow}", $data[$startRow - 1][20]);
+
+                        // merge cells
+                        $sheet->mergeCells("A{$startRow}:A{$endRow}");
+                        $sheet->mergeCells("C{$startRow}:C{$endRow}");
+                        $sheet->mergeCells("D{$startRow}:D{$endRow}");
+                        $sheet->mergeCells("E{$startRow}:E{$endRow}");
+                        $sheet->mergeCells("F{$startRow}:F{$endRow}");
+                        $sheet->mergeCells("G{$startRow}:G{$endRow}");
+                        $sheet->mergeCells("N{$startRow}:N{$endRow}");
+                        $sheet->mergeCells("O{$startRow}:O{$endRow}");
+                        $sheet->mergeCells("P{$startRow}:P{$endRow}");
+                        $sheet->mergeCells("Q{$startRow}:Q{$endRow}");
+                        $sheet->mergeCells("R{$startRow}:R{$endRow}");
+                        $sheet->mergeCells("T{$startRow}:T{$endRow}");
+                        $sheet->mergeCells("U{$startRow}:U{$endRow}");
                     }
                 }
 
                 // Center align the merged cells vertically and horizontally
-                $sheet->getStyle('A1:S' . $rowCount)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getStyle('A1:S' . $rowCount)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER); // Added horizontal center alignment
+                $sheet->getStyle('A1:U' . $rowCount)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A1:U' . $rowCount)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER); // Added horizontal center alignment
             },
         ];
     }
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:T1')->applyFromArray([
+        $sheet->getStyle('A1:U1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],
@@ -258,7 +264,7 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
         ]);
 
         // Styling the totals row
-        $sheet->getStyle('A2:T2')->applyFromArray([
+        $sheet->getStyle('A2:U2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['argb' => 'FFFFFFFF'],
