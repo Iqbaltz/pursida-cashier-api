@@ -129,7 +129,7 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
                     'remaining_payment' => ($totalPrice - $item->discount - $transaction->payment_amount) ?? '0',
                     'profit' => $profit ?? '0',
                     'total_profit' => $totalProfit ?? '0',
-                    'status' => $transaction->status ? 'Lunas' : 'Belum Lunas',
+                    'status' => $transaction->payment_status ? 'Lunas' : 'Belum Lunas',
                 ];
             }
             $totalAllSubtotal += $totalPrice;
@@ -240,11 +240,28 @@ class CashierTransactionExport implements FromCollection, WithTitle, WithHeading
                         $sheet->mergeCells("T{$startRow}:T{$endRow}");
                         $sheet->mergeCells("U{$startRow}:U{$endRow}");
                     }
-                }
+                    $statusCell = "U{$startRow}";
+                    $statusValue = $sheet->getCell($statusCell)->getValue();
 
+                    if ($statusValue === 'Lunas') {
+                        $sheet->getStyle($statusCell)->applyFromArray([
+                            'fill' => [
+                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'startColor' => ['argb' => 'FF00FF00'], // Green background
+                            ],
+                        ]);
+                    } else {
+                        $sheet->getStyle($statusCell)->applyFromArray([
+                            'fill' => [
+                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'startColor' => ['argb' => 'FFFF0000'], // Red background
+                            ],
+                        ]);
+                    }
+                }
                 // Center align the merged cells vertically and horizontally
                 $sheet->getStyle('A1:U' . $rowCount)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getStyle('A1:U' . $rowCount)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER); // Added horizontal center alignment
+                $sheet->getStyle('A1:U' . $rowCount)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             },
         ];
     }
