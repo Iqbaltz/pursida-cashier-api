@@ -68,6 +68,19 @@
         table th {
             border-right: 1px dashed rgb(88, 88, 88);
         }
+        
+        .table-invoice th:nth-child(2) {
+            width: 50% ;
+        } 
+        
+        .table-invoice tr td:nth-child(2){
+            width: 50%;
+        }
+
+        .table-invoice tr td:last-child {
+            padding-right: 8px;
+            padding-left: 4px;
+        }
 
         table td {
             border-right: 1px dashed rgb(88, 88, 88);
@@ -125,7 +138,7 @@
                     </tr>
                 </tbody>
             </table>
-            <table>
+            <table class="table-invoice">
                 <thead>
                     <tr>
                         <th>No.</th>
