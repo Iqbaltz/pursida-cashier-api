@@ -72,6 +72,19 @@
             border-right: 1px dashed black;
         }
 
+        .table-invoice th:nth-child(2) {
+            width: 40% ;
+        } 
+
+        .table-invoice tr td:nth-child(2){
+            width: 40%;
+        }
+
+        .table-invoice tr td:last-child {
+            padding-right: 8px;
+            padding-left: 4px;
+        }
+
         table th:last-child,
         table td:last-child {
             border-right: none;
@@ -124,7 +137,7 @@
                     </tr>
                 </tbody>
             </table>
-            <table>
+            <table class="table-invoice">
                 <thead>
                     <tr>
                         <th>No.</th>
