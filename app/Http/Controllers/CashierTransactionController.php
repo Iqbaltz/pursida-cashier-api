@@ -347,7 +347,7 @@ class CashierTransactionController extends Controller
             'kembalian' => -1 * ($total - $transaction->payment_amount),
         ];
 
-        return view('pdf/cashier-transaction-html', $data);
+        return view('pdf/cashier-transaction-html-landscape', $data);
     }
 
     public function print_receipt(Request $request, $id)
