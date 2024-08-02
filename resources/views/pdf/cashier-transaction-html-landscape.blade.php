@@ -154,16 +154,6 @@
                 <tfoot>
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="2">Subtotal</td>
-                        <td>{{ number_format($subtotal, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td colspan="2">Diskon (%)</td>
-                        <td>{{ number_format($diskon, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
                         <td colspan="2">Total Tagihan</td>
                         <td>{{ number_format($total, 0, ',', '.') }}</td>
                     </tr>
